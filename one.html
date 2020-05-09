@@ -1,0 +1,149 @@
+<html>
+<body> 
+    <script src = "p5.min.js"></script>
+    <script>
+var adf = 10      
+var grculx = 30
+var grculy = 30
+var gwidth = 480
+var bwidth = 157
+var Iwidth = 120
+var ch = 0;
+var ck = 0;
+var sum = [[0,0,0],[0,0,0],[0,0,0]]
+function evaluatesum(){
+  let rowsum1 = sum[0][0]+sum[0][1]+sum[0][2]
+  let rowsum2 = sum[1][0]+sum[1][1]+sum[1][2]
+  let rowsum3 = sum[2][0]+sum[2][1]+sum[2][2]
+  let colsum1 = sum[0][0]+sum[1][0]+sum[2][0]
+  let colsum2 = sum[0][1]+sum[1][1]+sum[2][1]
+  let colsum3 = sum[0][2]+sum[1][2]+sum[2][2]
+  let diagsum1 = sum[0][0]+sum[1][1]+sum[2][2]
+  let diagsum2 = sum[0][2]+sum[1][1]+sum[2][0]
+  var fsum = [rowsum1,rowsum2,rowsum3,colsum1,colsum2,colsum3,diagsum1,diagsum2]
+  return fsum
+}
+
+function checkwin(){
+  let g = evaluatesum()
+  var ld;
+  for(ld = 0;ld < g.length;ld++){
+    if(g[ld] == 3){
+      return "O"
+    }
+    if(g[ld] == -3){
+      return "X"
+    }        
+  }
+}
+
+function dbox(){    
+  let x = mouseX
+  let y = mouseY
+
+  if(x > grculx && x < grculx + bwidth){
+    ch = 1
+  }  
+  else{
+    if(x > grculx + bwidth && x < grculx + 2*bwidth){
+      ch = 2
+    }  
+    
+    else{
+      if(x > grculx + 2*bwidth && x < grculx + 3*bwidth){
+        ch = 3          
+      }
+    }
+  } 
+  if(y > grculy && y < grculy + bwidth){
+    ck = 1
+  }  
+  else{
+    if(y > grculx + bwidth && y < grculx + 2*bwidth){
+      ck = 2
+    }  
+    
+    else{
+      if(y > grculx + 2*bwidth && y < grculx + 3*bwidth){
+        ck = 3 
+        }
+    }
+  }     
+  return [ch,ck]
+} // end function dbox 
+var statust = [["ul","ul","ul"],["ul","ul","ul"],["ul","ul","ul"]]
+var i = 0
+function mouseClicked(){
+  //console.log("mc")
+  t = dbox()
+  let c = t[0]
+  let r = t[1]
+  //console.log("mc")
+  if(r > 0 && c > 0){
+      //console.log("mc")
+      if(i%2 == 0 && statust[r-1][c-1] == "ul"){
+        console.log("mc")
+        drawcircle(grculx + (2*t[0]-1)*(bwidth/2),grculy + (2*t[1]-1)*(bwidth/2))
+        statust[r-1][c-1] = "l"
+        sum[r-1][c-1] = 1
+        i = i + 1
+      }
+      if(i%2 == 1 && statust[r-1][c- 1] == "ul"){
+        drawplus(grculx + (2*t[0]-1)*(bwidth/2),grculy + (2*t[1]-1)*(bwidth/2))
+        statust[r-1][c - 1] = "l"
+        sum[r-1][c-1] = -1
+        i = i + 1
+      }
+      
+  }
+  console.log(evaluatesum())
+  if(checkwin() == "X"){
+    alert("Plus wins")
+    noLoop()
+  }
+  if(checkwin() == "O"){
+    alert("O wins")
+    noLoop()
+  }
+}
+
+function drawcircle(x,y){
+  stroke(255,0,0)
+  strokeWeight(4)  
+  ellipse(x,y,Iwidth/2,Iwidth/2)
+}
+
+function drawplus(x,y){
+  stroke(0,0,255)  
+  strokeWeight(8) 
+  line(x,y - Iwidth/2,x,y + Iwidth/2)
+  line(x - Iwidth/2,y,x + Iwidth/2,y)
+}
+
+function drawgrid(){
+  strokeWeight(4);   
+  rect(grculx,grculy,gwidth,gwidth)
+  line(grculx,grculy + bwidth,grculx + gwidth,grculy + bwidth)
+  line(grculx,grculy + 2*bwidth,grculx + gwidth,grculy + 2*bwidth)
+  line(grculx + bwidth,grculy,grculx + bwidth,grculy + gwidth)
+  line(grculx + 2*bwidth,grculy,grculx+ 2*bwidth,grculy + gwidth)
+}
+
+function setup() {
+  createCanvas(1000,800)
+  drawgrid()
+}
+</script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+</html>
